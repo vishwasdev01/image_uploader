@@ -1,0 +1,19 @@
+version: "3"
+services:
+  react-app:
+    build:
+      context: ./client
+    ports:
+      - "3000:3000"
+  node-server:
+    build:
+      context: ./server
+    ports:
+      - "8080:8080"
+  
+  nginx:
+    image: nginx
+    ports: 
+      - "80:80"
+    volumes:
+      - ./client/build:/usr/share/nginx/html
