@@ -1,4 +1,5 @@
 import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { Box, styled } from "@mui/material";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
@@ -31,7 +32,7 @@ const ImageBox = styled(Box)({
   marginTop: "100px",
   justifyContent: "center",
   gap: "20px",
-  "& div": {
+  "& .container": {
     width: "250px",
     height: "250px",
     borderRadius: "10px",
@@ -70,6 +71,15 @@ function App() {
     try {
       const { data } = await axios.get("/fetch-upload");
       setImageData(data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      await axios.delete("/upload/" + id);
+      fetchImage();
     } catch (e) {
       console.log(e);
     }
@@ -158,10 +168,20 @@ function App() {
       <ImageBox>
         {imageData.map((ele: any) => {
           return (
-            <Box>
+            <Box className="container">
               <img src={ele?.image} alt={ele.author} />
-              <p>Author Name:- {ele.author}</p>
-              <p>Description:- {ele.description}</p>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <div style={{ width: "230px" }}>
+                  <p>Author Name:- {ele.author}</p>
+                  <p>Description:- {ele.description}</p>
+                </div>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <DeleteIcon
+                    onClick={() => handleDelete(ele?.id)}
+                    style={{ color: "#ff0000", cursor: "pointer" }}
+                  />
+                </div>
+              </Box>
             </Box>
           );
         })}
