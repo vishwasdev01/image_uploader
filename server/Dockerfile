@@ -2,11 +2,11 @@ FROM node:18.17.0 AS server
 
 WORKDIR /server
 
-COPY server/package*.json ./
+COPY package*.json ./
 
-RUN npm install
+RUN npm ci
 
-COPY server/ ./
+COPY . .
 
 EXPOSE 8080
 

@@ -1,18 +1,17 @@
-FROM node:18.17.0 AS server
+# Use a node base image
+FROM node:18-alpine3.16 as builder
 
+# Set the working directory
 WORKDIR /client
 
-COPY client/package*.json ./
+# Copy package.json and package-lock.json files
+COPY package*.json ./
 
-RUN npm install
+# Install dependencies
+RUN npm ci
 
-COPY client/ ./
+# Copy the entire app directory
+COPY . .
 
+# Build the application
 RUN npm run build
-
-FROM nginx
-
-COPY --form=client /client/build /usr/share/nginx/html
-EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]
